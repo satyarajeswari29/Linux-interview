@@ -337,29 +337,6 @@ tail -f /var/log/messages
 
 ---
 
-# 12. grep Command
-
-## Purpose
-
-Searches patterns in files.
-
-## Examples
-
-```bash
-grep error app.log
-grep -i failed app.log
-grep -r java /opt/apps
-```
-
-## Real-Time Use Case
-
-Finding errors during production outages.
-
-Example:
-
-```bash
-grep ERROR catalina.out
-```
 
 ## Interview Questions
 
@@ -372,6 +349,615 @@ grep ERROR catalina.out
 # 13. find Command
 
 ## Purpose
+# Complete `grep` Command Guide for DevOps Engineers
+
+`grep` is one of the **most important Linux commands** in production environments.
+
+Used daily for:
+
+* Log analysis
+* Error troubleshooting
+* Monitoring
+* Searching configs
+* Security investigations
+* CI/CD debugging
+
+---
+
+# What is grep?
+
+`grep` searches text patterns inside files.
+
+Syntax:
+
+```bash id="k3r9wd"
+grep [options] pattern file
+```
+
+Example:
+
+```bash id="ykq2b8"
+grep ERROR app.log
+```
+
+Searches for `ERROR` in `app.log`.
+
+---
+
+# 1. Basic grep Commands
+
+## Search a word
+
+```bash id="d2m7qc"
+grep error app.log
+```
+
+---
+
+# 2. Case-Insensitive Search
+
+## `-i`
+
+```bash id="h5t9vn"
+grep -i error app.log
+```
+
+Matches:
+
+* ERROR
+* Error
+* error
+
+## Production Use Case
+
+Search logs without worrying about case.
+
+---
+
+# 3. Show Line Numbers
+
+## `-n`
+
+```bash id="d7x0pw"
+grep -n ERROR app.log
+```
+
+Output:
+
+```text id="s4q1mb"
+45: ERROR database failed
+```
+
+## Production Use Case
+
+Locate exact error line quickly.
+
+---
+
+# 4. Count Matching Lines
+
+## `-c`
+
+```bash id="d9v2ky"
+grep -c ERROR app.log
+```
+
+## Production Use Case
+
+Count number of failures/errors.
+
+Example:
+
+* failed login attempts
+* HTTP 500 errors
+
+---
+
+# 5. Invert Match
+
+## `-v`
+
+```bash id="i1f8tx"
+grep -v INFO app.log
+```
+
+Shows lines NOT containing INFO.
+
+## Production Use Case
+
+Remove unnecessary logs.
+
+---
+
+# 6. Recursive Search
+
+## `-r`
+
+```bash id="rxv6p1"
+grep -r database /etc/
+```
+
+Searches all files recursively.
+
+## Production Use Case
+
+Find config values across directories.
+
+---
+
+# 7. Search Whole Word
+
+## `-w`
+
+```bash id="i7m4cz"
+grep -w fail app.log
+```
+
+Matches only exact word `fail`.
+
+Does NOT match:
+
+* failed
+* failing
+
+---
+
+# 8. Show Only Matching Word
+
+## `-o`
+
+```bash id="lv3m2s"
+grep -o ERROR app.log
+```
+
+---
+
+# 9. Search Multiple Files
+
+```bash id="u1k5xt"
+grep ERROR *.log
+```
+
+## Production Use Case
+
+Search all logs together.
+
+---
+
+# 10. Ignore Binary Files
+
+## `-I`
+
+```bash id="z8r0wn"
+grep -rI password /opt/
+```
+
+---
+
+# 11. Extended Regex
+
+## `-E`
+
+```bash id="j4q8vu"
+grep -E "error|failed|warning" app.log
+```
+
+## Production Use Case
+
+Search multiple patterns together.
+
+---
+
+# 12. Search Exact Match
+
+```bash id="w7x1mq"
+grep "^root" /etc/passwd
+```
+
+Matches lines STARTING with root.
+
+---
+
+# 13. Search Ending Pattern
+
+```bash id="mlz4cx"
+grep "failed$" app.log
+```
+
+Matches lines ENDING with failed.
+
+---
+
+# 14. Search Empty Lines
+
+```bash id="g2v9kx"
+grep '^$' file.txt
+```
+
+---
+
+# 15. Search Non-Empty Lines
+
+```bash id="y4r8tb"
+grep -v '^$' file.txt
+```
+
+---
+
+# 16. Display Before Lines
+
+## `-B`
+
+```bash id="s8x2mv"
+grep -B 3 ERROR app.log
+```
+
+Shows 3 lines BEFORE error.
+
+---
+
+# 17. Display After Lines
+
+## `-A`
+
+```bash id="k1q9zs"
+grep -A 3 ERROR app.log
+```
+
+Shows 3 lines AFTER error.
+
+---
+
+# 18. Display Surrounding Context
+
+## `-C`
+
+```bash id="ux8m0r"
+grep -C 2 ERROR app.log
+```
+
+Shows:
+
+* 2 lines before
+* 2 lines after
+
+## Production Use Case
+
+Analyze full stack trace.
+
+---
+
+# 19. Search Logs in Real Time
+
+```bash id="uj2xv9"
+tail -f app.log | grep ERROR
+```
+
+## Production Use Case
+
+Monitor live errors during deployments.
+
+---
+
+# 20. Ignore Permission Errors
+
+```bash id="ah7m0v"
+grep -r ERROR / 2>/dev/null
+```
+
+## Production Use Case
+
+Search entire filesystem safely.
+
+---
+
+# 21. Search IP Address
+
+```bash id="cg8q5m"
+grep "192.168.1.10" access.log
+```
+
+## Production Use Case
+
+Track suspicious traffic.
+
+---
+
+# 22. Search HTTP Status Codes
+
+```bash id="j2m7yv"
+grep "500" access.log
+```
+
+## Production Use Case
+
+Find failed API requests.
+
+---
+
+# 23. Search Failed Login Attempts
+
+```bash id="q9d0vr"
+grep "Failed password" /var/log/secure
+```
+
+## Production Use Case
+
+Security monitoring.
+
+---
+
+# 24. Search Running Process
+
+```bash id="m1x9qp"
+ps -ef | grep nginx
+```
+
+## Production Use Case
+
+Verify service running.
+
+---
+
+# 25. Exclude grep Process Itself
+
+```bash id="q7l2mn"
+ps -ef | grep nginx | grep -v grep
+```
+
+---
+
+# 26. Search Environment Variables
+
+```bash id="ht4w0x"
+env | grep JAVA
+```
+
+---
+
+# 27. Highlight Matches
+
+```bash id="r8q2kx"
+grep --color=auto ERROR app.log
+```
+
+---
+
+# 28. Search Multiple Patterns Using File
+
+Create pattern file:
+
+```text id="jlwmps"
+ERROR
+FAILED
+WARNING
+```
+
+Then:
+
+```bash id="s6q1wv"
+grep -f patterns.txt app.log
+```
+
+---
+
+# 29. Use grep with find
+
+```bash id="d9p4mc"
+find /var/log -name "*.log" -exec grep ERROR {} \;
+```
+
+## Production Use Case
+
+Search errors across all logs.
+
+---
+
+# 30. Search Kubernetes Logs
+
+```bash id="skp0m1"
+kubectl logs pod-name | grep ERROR
+```
+
+## Production Use Case
+
+Troubleshoot Kubernetes applications.
+
+---
+
+# 31. Search Docker Logs
+
+```bash id="l4m8zc"
+docker logs container-id | grep exception
+```
+
+---
+
+# 32. grep with awk
+
+```bash id="h1w7xo"
+grep ERROR app.log | awk '{print $5}'
+```
+
+---
+
+# 33. grep with wc
+
+Count errors:
+
+```bash id="u8n2rq"
+grep ERROR app.log | wc -l
+```
+
+---
+
+# 34. Search Apache Errors
+
+```bash id="m9x4ts"
+grep error /var/log/httpd/error_log
+```
+
+---
+
+# 35. Search Tomcat Exceptions
+
+```bash id="k0p7vc"
+grep Exception catalina.out
+```
+
+---
+
+# 36. Search Jenkins Failures
+
+```bash id="k5t9wl"
+grep FAILED /var/log/jenkins/jenkins.log
+```
+
+---
+
+# 37. Search Nginx 502 Errors
+
+```bash id="r7x2qn"
+grep 502 access.log
+```
+
+---
+
+# 38. Search CPU Issues
+
+```bash id="v1p8zw"
+top | grep java
+```
+
+---
+
+# 39. Search Open Ports
+
+```bash id="d3m0kj"
+ss -tulnp | grep 8080
+```
+
+---
+
+# 40. Search Crontab Jobs
+
+```bash id="x4q8nm"
+crontab -l | grep backup
+```
+
+---
+
+# Real-Time DevOps grep Use Cases
+
+| Scenario             | grep Command                             |                 |
+| -------------------- | ---------------------------------------- | --------------- |
+| Application Down     | `grep ERROR app.log`                     |                 |
+| Failed Logins        | `grep "Failed password" /var/log/secure` |                 |
+| High HTTP Errors     | `grep 500 access.log`                    |                 |
+| Find Running Process | `ps -ef                                  | grep java`      |
+| Kubernetes Errors    | `kubectl logs pod                        | grep ERROR`     |
+| Docker Issues        | `docker logs id                          | grep exception` |
+| Disk Cleanup         | `find / -name "*.log"                    | grep old`       |
+| Check Service Port   | `ss -tulnp                               | grep 80`        |
+
+---
+
+# Most Important grep Commands for Interviews
+
+```bash id="l6v3qn"
+grep -i
+grep -v
+grep -r
+grep -n
+grep -c
+grep -E
+grep -A
+grep -B
+grep -C
+```
+
+---
+
+# Frequently Asked Interview Questions
+
+## 1. Difference between grep and egrep?
+
+### Answer
+
+* `grep` → basic regex
+* `egrep` or `grep -E` → extended regex
+
+---
+
+## 2. Explain grep -v.
+
+### Answer
+
+Displays lines NOT matching pattern.
+
+---
+
+## 3. How to search recursively?
+
+### Answer
+
+```bash id="i9q0vk"
+grep -r pattern directory
+```
+
+---
+
+## 4. How to search case-insensitive?
+
+### Answer
+
+```bash id="v2m7qs"
+grep -i pattern file
+```
+
+---
+
+## 5. How to count matches?
+
+### Answer
+
+```bash id="p8x3tw"
+grep -c pattern file
+```
+
+---
+
+# Daily Production grep Workflow
+
+## Check Errors
+
+```bash id="f6z2vr"
+tail -f app.log | grep ERROR
+```
+
+## Check Failed Requests
+
+```bash id="x0p4jw"
+grep 500 access.log
+```
+
+## Check Running App
+
+```bash id="p9r7mv"
+ps -ef | grep java
+```
+
+## Check Open Port
+
+```bash id="c5q1tx"
+ss -tulnp | grep 8080
+```
+
+## Check Failed SSH Logins
+
+```bash id="e2m8zv"
+grep "Failed password" /var/log/secure
+```
 
 Search files and directories.
 
